@@ -27,7 +27,7 @@ class GroupsController < ApplicationController
   def edit
   end
   def show
-
+    @posts = @group.posts
   end
   def update
     if @group.update(group_params)
@@ -50,7 +50,7 @@ class GroupsController < ApplicationController
   def check_user
     if current_user != @group.user
       redirect_to root_path, alert: "You have no permission."
-    end 
+    end
   end
 
   def group_params
