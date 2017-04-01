@@ -27,7 +27,7 @@ class GroupsController < ApplicationController
   def edit
   end
   def show
-    @posts = @group.posts
+    @posts = @group.posts.recent
   end
   def update
     if @group.update(group_params)
