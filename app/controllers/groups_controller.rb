@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_action :authenticate_user! , only: [:new, :create, :edit, :update, :destroy]
+  before_action :authenticate_user! , only: [:new, :create, :edit, :update, :destroy, :join, :quit]
   before_action :set_group,  only: [:edit, :show, :update, :destroy]
   before_action :check_user, only: [:edit, :update, :destroy]
 
@@ -42,6 +42,30 @@ class GroupsController < ApplicationController
     redirect_to groups_path, notice: "Delete"
 
   end
+
+  def join
+    @group = Group.find(params[:id])
+
+    if !current_user.is_member_of?(@group)
+      current_user.join!(@group)
+      flash[:notice] = "加入成功！"
+    else
+      flash[:warning] = "已经是了"
+    end
+    redirect_to group_path(@group)
+  end
+
+  def quit
+    @group = Group.find(params[:id])
+    if current_user.is_member_of?(@group)
+      current_user.quit!(@group)
+      flash[:alert] = "已退出"
+    else
+      flash[:warning] = "退不出"
+    end
+    redirect_to group_path(@group)
+  end
+
   private
   def set_group
     @group = Group.find(params[:id])
